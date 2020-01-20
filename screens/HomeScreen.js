@@ -76,9 +76,9 @@ export default function HomeScreen() {
           {
             messages.map(message =>
               <View> 
-              <Text>From:{message.from}</Text>
-              <Text>To: {message.to}</Text>
-              <Text>Message: {message.text}</Text>
+              <Text>From:{message.from} </Text>
+              <Text>To: {message.to} </Text>
+              <Text>Message: {message.text} </Text>
               <Button title="delete" onPress={()=>handleDelete(message)}/>
               <Button title="edit" onPress={()=>handleEdit(message)}/>
               </View>
