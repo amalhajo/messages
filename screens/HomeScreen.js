@@ -65,6 +65,7 @@ export default function HomeScreen() {
     setTo(message.to)
     setText(message.text)
     setId(message.id)
+
   }
   
   return (
@@ -74,8 +75,10 @@ export default function HomeScreen() {
         contentContainerStyle={styles.contentContainer}>
 
           {
+            
             messages.map(message =>
               <View> 
+              
               <Text>From:{message.from} </Text>
               <Text>To: {message.to} </Text>
               <Text>Message: {message.text} </Text>
