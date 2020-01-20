@@ -1,4 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
+
 import React, { useState, useEffect } from 'react';
 import {
   Image,
@@ -11,10 +12,11 @@ import {
   Button,
   TextInput
 } from 'react-native';
-
+import 'firebase/auth'
 import { MonoText } from '../components/StyledText';
-
 import db from '../db';
+import firebase from '@firebase/app';
+
 
 
 export default function HomeScreen() {
@@ -35,19 +37,24 @@ export default function HomeScreen() {
   });
   },[])
 
+  useEffect( ()=>{
+    console.log('auth',firebase.auth())
+  },[])
+
   const handleDelete =(message)=>{
     db.collection("messages").doc(message.id).delete()
   }
 
   const handleSend=()=>{
+    const uid = firebase.auth().currentUser.uid
     if(id){
       console.log("the id",id)
-      db.collection("messages").doc(id).update({from,to,text})
+      db.collection("messages").doc(id).update({uid,to,text})
     }
     else{
       db.collection("messages").add(
         {
-          from: from,
+          from: uid,
           to: to,
           text: text
         }
