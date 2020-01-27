@@ -16,7 +16,7 @@ import 'firebase/auth'
 import { MonoText } from '../components/StyledText';
 import db from '../db';
 import firebase from '@firebase/app';
-
+import Messages from './Messages'
 
 
 export default function HomeScreen() {
@@ -41,37 +41,15 @@ export default function HomeScreen() {
     console.log('auth',firebase.auth())
   },[])
 
-  const handleDelete =(message)=>{
-    db.collection("messages").doc(message.id).delete()
+  const handleLogin =()=>{
+    firebase.auth().signInWithEmailAndPassword(email, password)
   }
 
-  const handleSend=()=>{
-    const uid = firebase.auth().currentUser.uid
-    if(id){
-      console.log("the id",id)
-      db.collection("messages").doc(id).update({uid,to,text})
-    }
-    else{
-      db.collection("messages").add(
-        {
-          from: uid,
-          to: to,
-          text: text
-        }
-      )
-    }
-    setFrom("")
-    setId("")
-    setText("")
-    setTo("")
-   
-  }
 
-  const handleEdit=(message)=>{
-    setFrom(message.from)
-    setTo(message.to)
-    setText(message.text)
-    setId(message.id)
+  
+  
+
+  const handleLogout=()=>{
 
   }
   
@@ -80,17 +58,13 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
+        
 
           {
             
-            messages.map(message =>
+            messages.map((message,i) =>
               <View> 
-              
-              <Text>From:{message.from} </Text>
-              <Text>To: {message.to} </Text>
-              <Text>Message: {message.text} </Text>
-              <Button title="delete" onPress={()=>handleDelete(message)}/>
-              <Button title="edit" onPress={()=>handleEdit(message)}/>
+              <Message key={i} message={message} />
               </View>
               )
           }
@@ -115,7 +89,7 @@ export default function HomeScreen() {
       
     />
     <Button title="send" onPress={()=>handleSend()}/>
-
+    <Button title="Logout" onPress={()=>handleLogout()}/>
     </View>
   );
 }
@@ -158,93 +132,3 @@ function handleHelpPress() {
     'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: '2%'
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-});

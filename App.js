@@ -5,7 +5,7 @@ import { Platform, StatusBar, StyleSheet, View ,Button, TextInput} from "react-n
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from 'react';
 import AppNavigator from "./navigation/AppNavigator";
-import firebase from '@firebase/app';
+import * as firebase from '@firebase/app';
 import 'firebase/auth';
 
 
@@ -14,22 +14,20 @@ export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-
 
   useEffect((() => { 
-    return  unsubscribe = firebase.auth().onAuthStateChanged(setUser)
- 
+    return firebase.auth().onAuthStateChanged(setUser)
+
     }
   ,[]))
 
-  const handleLogin =()=>{
-    firebase.auth().signInWithEmailAndPassword(email, password)
-  }
+  
   const handleRegister =()=>{
     firebase.auth().createUserWithEmailAndPassword(email, password)
   }
-
+  const handleLogout=()=>{
+    firebase.auth().signOut()
+  }
  
 
  
@@ -46,6 +44,7 @@ export default function App(props) {
   } else if (!user) {
     return (
       <View >
+       
         <TextInput
           style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
           onChangeText={text => setEmail(text)}
